@@ -10,6 +10,12 @@ namespace RsaSecureToken.Tests
     {
         private IProfile _profile = Substitute.For<IProfile>();
         private IRsaToken _rsaToken = Substitute.For<IRsaToken>();
+        private AuthenticationService _authenticationService;
+
+        public AuthenticationServiceTests()
+        {
+            _authenticationService = new AuthenticationService(_profile, _rsaToken);
+        }
 
         [Test]
         public void IsValidTest()
@@ -22,7 +28,7 @@ namespace RsaSecureToken.Tests
         }
 
         [Test]
-        public void Hard_Code_Token_Should_Failed()
+        public void InValid_Should_Failed()
         {
             var authenticate = new AuthenticationService();
 
@@ -34,14 +40,43 @@ namespace RsaSecureToken.Tests
         [Test]
         public void IsValidTest_Sub()
         {
-            var authenticate = new AuthenticationService(_profile, _rsaToken);
+            GivenProfile("joey", "91");
+            GivenToken("000000");
 
-            _profile.GetPassword("joey").Returns("91");
-            _rsaToken.GetRandom("").ReturnsForAnyArgs("000000");
+            ShouldBeValid("joey", "91000000");
+        }
 
-            var actual = authenticate.IsValid("joey", "91000000");
+        [Test]
+        public void InValidTest_Sub()
+        {
+            GivenProfile("joey", "91");
+            GivenToken("123456");
 
-            Assert.IsTrue(actual);                       
+            ShouldBeInValid("joey", "91000000");
+        }
+
+        private void ShouldBeValid(string account, string passCode)
+        {
+            var actual = _authenticationService.IsValid(account, passCode);
+
+            Assert.IsTrue(actual);
+        }
+
+        private void ShouldBeInValid(string account, string passCode)
+        {
+            var actual = _authenticationService.IsValid(account, passCode);
+
+            Assert.IsFalse(actual);
+        }
+
+        private void GivenToken(string token)
+        {
+            _rsaToken.GetRandom("").ReturnsForAnyArgs(token);
+        }
+
+        private void GivenProfile(string account, string password)
+        {
+            _profile.GetPassword(account).Returns(password);
         }
     }
 
