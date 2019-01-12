@@ -10,7 +10,7 @@ namespace RsaSecureToken.Tests
     {
         private readonly IProfile _profile = Substitute.For<IProfile>();
         private readonly IRsaToken _rsaToken = Substitute.For<IRsaToken>();
-        private readonly ILog _log = Substitute.For<ConsoleLog>();
+        private readonly ILog _log = Substitute.For<ILog>();
         private readonly AuthenticationService _authenticationService;
 
         public AuthenticationServiceTests()
@@ -51,7 +51,6 @@ namespace RsaSecureToken.Tests
         {
             GivenProfile("joey", "91");
             GivenToken("123456");
-            _authenticationService.IsValid("joey", "wrong pwd");
             _log.Received(1).Save("account:joey try to login failed");
         }
 
