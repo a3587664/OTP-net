@@ -28,16 +28,6 @@ namespace RsaSecureToken.Tests
         }
 
         [Test]
-        public void InValid_Should_Failed()
-        {
-            var authenticate = new AuthenticationService();
-
-            var actual = authenticate.IsValid("joey", "91000000");
-
-            Assert.IsFalse(actual);                       
-        }
-
-        [Test]
         public void IsValidTest_Sub()
         {
             GivenProfile("joey", "91");
