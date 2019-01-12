@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NUnit.Framework;
-using RsaSecureToken;
+﻿using NUnit.Framework;
+using RsaSecureToken.Interface;
 using Assert = NUnit.Framework.Assert;
 
 namespace RsaSecureToken.Tests
@@ -13,15 +7,35 @@ namespace RsaSecureToken.Tests
     [TestFixture]
     public class AuthenticationServiceTests
     {
-        [Test()]
+        [Test]
         public void IsValidTest()
         {
-            var target = new AuthenticationService();
+            var target = new AuthenticationService(new FakeProfile(), new FakeToken());
 
             var actual = target.IsValid("joey", "91000000");
 
-            //always failed
             Assert.IsTrue(actual);                       
+        }
+    }
+
+    public class FakeProfile : IProfile
+    {
+        public string GetPassword(string account)
+        {
+            if (account == "joey")
+            {
+                return "91";
+            }
+
+            return "";
+        }
+    }
+
+    public class FakeToken : IRsaToken
+    {
+        public string GetRandom(string account)
+        {
+            return "000000";
         }
     }
 }
