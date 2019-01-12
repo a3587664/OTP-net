@@ -51,7 +51,10 @@ namespace RsaSecureToken.Tests
         {
             GivenProfile("joey", "91");
             GivenToken("123456");
-            _log.Received(1).Save("account:joey try to login failed");
+
+            _log.Received(1).Save(Arg.Is<string>(m => m.Contains("joey") && m.Contains("login failed")));
+
+            //_log.Received(1).Save("account:joey try to login failed");
         }
 
         private void ShouldBeValid(string account, string passCode)
