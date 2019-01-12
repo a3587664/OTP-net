@@ -8,9 +8,9 @@ namespace RsaSecureToken.Tests
     [TestFixture]
     public class AuthenticationServiceTests
     {
-        private IProfile _profile = Substitute.For<IProfile>();
-        private IRsaToken _rsaToken = Substitute.For<IRsaToken>();
-        private AuthenticationService _authenticationService;
+        private readonly IProfile _profile = Substitute.For<IProfile>();
+        private readonly IRsaToken _rsaToken = Substitute.For<IRsaToken>();
+        private readonly AuthenticationService _authenticationService;
 
         public AuthenticationServiceTests()
         {
