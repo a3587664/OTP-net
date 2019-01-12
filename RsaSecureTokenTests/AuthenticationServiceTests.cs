@@ -52,6 +52,7 @@ namespace RsaSecureToken.Tests
             GivenProfile("joey", "91");
             GivenToken("123456");
             _authenticationService.IsValid("joey","91000000");
+            ShouldBeInValid("joey", "91000000");
             _log.Received(1).Save("account:joey try to login failed");
         }
 
