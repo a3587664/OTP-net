@@ -14,13 +14,14 @@ namespace RsaSecureToken
         {
             _profile = new Profile();
             _token = new RsaToken();
+            _log = new ConsoleLog();
         }
         
-        public AuthenticationService(IProfile profile, IRsaToken token, ILog log = null)
+        public AuthenticationService(IProfile profile, IRsaToken token, ILog log)
         {
             _profile = profile;
             _token = token;
-            _log = log ?? new ConsoleLog();
+            _log = log;
         }
 
         public bool IsValid(string account, string password)

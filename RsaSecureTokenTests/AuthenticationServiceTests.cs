@@ -15,17 +15,17 @@ namespace RsaSecureToken.Tests
 
         public AuthenticationServiceTests()
         {
-            _authenticationService = new AuthenticationService(_profile, _rsaToken);
+            _authenticationService = new AuthenticationService(_profile, _rsaToken, _log);
         }
 
         [Test]
         public void IsValidTest()
         {
-            var authenticate = new AuthenticationService(new FakeProfile(), new FakeToken());
+            var authenticate = new AuthenticationService(new FakeProfile(), new FakeToken(), new ConsoleLog());
 
             var actual = authenticate.IsValid("joey", "91000000");
 
-            Assert.IsTrue(actual);                       
+            Assert.IsTrue(actual);
         }
 
         [Test]
@@ -51,7 +51,7 @@ namespace RsaSecureToken.Tests
         {
             GivenProfile("joey", "91");
             GivenToken("123456");
-            _authenticationService.IsValid("joey","wrong pwd");
+            _authenticationService.IsValid("joey", "wrong pwd");
             _log.Received(1).Save("account:joey try to login failed");
         }
 
