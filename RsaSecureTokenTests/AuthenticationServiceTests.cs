@@ -8,26 +8,13 @@ namespace RsaSecureToken.Tests
     [TestFixture]
     public class AuthenticationServiceTests
     {
+        private IProfile _profile = Substitute.For<IProfile>();
+        private IRsaToken _rsaToken = Substitute.For<IRsaToken>();
+
         [Test]
         public void IsValidTest()
         {
             var authenticate = new AuthenticationService(new FakeProfile(), new FakeToken());
-
-            var actual = authenticate.IsValid("joey", "91000000");
-
-            Assert.IsTrue(actual);                       
-        }
-
-        [Test]
-        public void IsValidTest_Sub()
-        {
-            var profile = Substitute.For<IProfile>();
-            var token = Substitute.For<IRsaToken>();
-
-            var authenticate = new AuthenticationService(profile, token);
-
-            profile.GetPassword("joey").Returns("91");
-            token.GetRandom("").ReturnsForAnyArgs("000000");
 
             var actual = authenticate.IsValid("joey", "91000000");
 
@@ -42,6 +29,19 @@ namespace RsaSecureToken.Tests
             var actual = authenticate.IsValid("joey", "91000000");
 
             Assert.IsFalse(actual);                       
+        }
+
+        [Test]
+        public void IsValidTest_Sub()
+        {
+            var authenticate = new AuthenticationService(_profile, _rsaToken);
+
+            _profile.GetPassword("joey").Returns("91");
+            _rsaToken.GetRandom("").ReturnsForAnyArgs("000000");
+
+            var actual = authenticate.IsValid("joey", "91000000");
+
+            Assert.IsTrue(actual);                       
         }
     }
 
