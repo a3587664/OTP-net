@@ -10,6 +10,7 @@ namespace RsaSecureToken.Tests
     {
         private readonly IProfile _profile = Substitute.For<IProfile>();
         private readonly IRsaToken _rsaToken = Substitute.For<IRsaToken>();
+        private readonly ILog _log = Substitute.For<ConsoleLog>();
         private readonly AuthenticationService _authenticationService;
 
         public AuthenticationServiceTests()
@@ -43,6 +44,15 @@ namespace RsaSecureToken.Tests
             GivenToken("123456");
 
             ShouldBeInValid("joey", "91000000");
+        }
+
+        [Test]
+        public void When_InValid_Should_Log()
+        {
+            GivenProfile("joey", "91");
+            GivenToken("123456");
+            _authenticationService.IsValid("joey","91000000");
+            _log.Received(1).Save("account:joey try to login failed");
         }
 
         private void ShouldBeValid(string account, string passCode)
