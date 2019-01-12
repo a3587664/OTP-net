@@ -43,7 +43,7 @@ namespace RsaSecureToken
             {
                 // todo, 如何驗證當有非法登入的情況發生時，有正確地記錄log？
                 var content = $"account:{account} try to login failed";
-                this._log.Save(content);
+                //this._log.Save(content);
                 return false;
             }
         }
