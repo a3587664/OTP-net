@@ -8,13 +8,17 @@ namespace RsaSecureToken.Tests
     [TestFixture]
     public class AuthenticationServiceTests
     {
-        private readonly IProfile _profile = Substitute.For<IProfile>();
-        private readonly IRsaToken _rsaToken = Substitute.For<IRsaToken>();
-        private readonly ILog _log = Substitute.For<ILog>();
-        private readonly AuthenticationService _authenticationService;
+        private IProfile _profile;
+        private IRsaToken _rsaToken;
+        private ILog _log;
+        private AuthenticationService _authenticationService;
 
-        public AuthenticationServiceTests()
+        [SetUp]
+        public void SetUp()
         {
+            _profile = Substitute.For<IProfile>();
+            _rsaToken = Substitute.For<IRsaToken>();
+            _log = Substitute.For<ILog>();
             _authenticationService = new AuthenticationService(_profile, _rsaToken, _log);
         }
 
@@ -53,7 +57,7 @@ namespace RsaSecureToken.Tests
             GivenToken("123456");
             _authenticationService.IsValid("joey", "wrong pwd");
             _log.Received(1).Save(Arg.Is<string>(m => m.Contains("joey") && m.Contains("login failed")));
-            //_log.Received(1).Save("account:joey try to login failed");
+            //_log.Received(1).Save("account:joey try to login failed"); //過度指定
         }
 
         private void ShouldBeValid(string account, string passCode)
@@ -61,6 +65,8 @@ namespace RsaSecureToken.Tests
             var actual = _authenticationService.IsValid(account, passCode);
 
             Assert.IsTrue(actual);
+
+            _log.Received(0).Save(Arg.Is<string>(m => m.Contains(account) && m.Contains("login failed")));
         }
 
         private void ShouldBeInValid(string account, string passCode)
