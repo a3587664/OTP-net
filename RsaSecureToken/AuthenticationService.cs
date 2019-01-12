@@ -8,11 +8,11 @@ namespace RsaSecureToken
     {
         private IProfile _profile;
         private IRsaToken _token;
-
-        public AuthenticationService(IProfile profile, IRsaToken token)
+        
+        public AuthenticationService(IProfile profile = null, IRsaToken token = null)
         {
-            _profile = profile;
-            _token = token;
+            _profile = profile ?? new Profile();
+            _token = token ?? new RsaToken();
         }
 
         public bool IsValid(string account, string password)

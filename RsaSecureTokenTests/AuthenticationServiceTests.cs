@@ -10,11 +10,26 @@ namespace RsaSecureToken.Tests
         [Test]
         public void IsValidTest()
         {
-            var target = new AuthenticationService(new FakeProfile(), new FakeToken());
+            var authenticate = CreateAuthenticationService();
 
-            var actual = target.IsValid("joey", "91000000");
+            var actual = authenticate.IsValid("joey", "91000000");
 
             Assert.IsTrue(actual);                       
+        }
+
+        [Test]
+        public void Hard_Code_Token_Should_Failed()
+        {
+            var authenticate = new AuthenticationService();
+
+            var actual = authenticate.IsValid("joey", "91000000");
+
+            Assert.IsFalse(actual);                       
+        }
+
+        private static AuthenticationService CreateAuthenticationService()
+        {
+            return new AuthenticationService(new FakeProfile(), new FakeToken());
         }
     }
 
